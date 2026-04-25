@@ -22,7 +22,7 @@ final List<Category> mainCategories = [
   Category(
     id: 1,
     title: "أفعال",
-    numberOf: 50,
+    numberOf: 500,
     icon: Icons.directions_run,
     color: Colors.blue,
   ),

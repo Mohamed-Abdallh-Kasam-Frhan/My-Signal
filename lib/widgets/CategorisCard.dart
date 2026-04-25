@@ -56,7 +56,7 @@ class _CategoryCardState extends State<CategoryCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("${(widget.element.numberOf * 100).toInt()}%"),
+                      Text("${widget.element.numberOf}"),
                       const SizedBox(width: 5),
                     ],
                   ),
