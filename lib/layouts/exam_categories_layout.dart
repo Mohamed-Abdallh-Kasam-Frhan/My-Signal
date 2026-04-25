@@ -10,6 +10,6 @@ class ExamCategoriesLayout extends StatefulWidget {
 class _ExamCategoriesLayoutState extends State<ExamCategoriesLayout> {
   @override
   Widget build(BuildContext context) {
-    return const Text("Exam categories");
+    return const Center(child: Text("Exam categories"));
   }
 }

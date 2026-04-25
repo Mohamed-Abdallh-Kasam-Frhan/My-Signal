@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:mysignal/controllers/home_controller.dart';
 import 'package:mysignal/layouts/exam_categories_layout.dart';
 import 'package:mysignal/layouts/favorite_layout.dart';
 import 'package:mysignal/layouts/home_layout.dart';
@@ -16,21 +15,14 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
-  final HomeController _controller = HomeController();
   int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final categories = _controller.getCategories();
     return Scaffold(
       extendBody: true,
-      appBar: const CustomAppBar(
-        title: "التصنيفات",
-        actions: [
-          Icon(Icons.search),
-          SizedBox(width: 10),
-        ],
-      ),
+      extendBodyBehindAppBar: true,
+      appBar: _buildModernAppBar(context, title: "التصنيفات"),
       body: IndexedStack(
         index: _selectedIndex,
         children: const [
@@ -100,6 +92,78 @@ class _HomepageState extends State<Homepage> {
                 ],
               ),
             ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildModernAppBar(BuildContext context,
+      {required String title}) {
+    return PreferredSize(
+      // تحديد الارتفاع الكلي للشريط مع الهوامش
+      preferredSize: const Size.fromHeight(100),
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(25),
+            child: BackdropFilter(
+              // زيادة الضبابية لتعطي ملمس الزجاج الفاخر
+              filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+              child: Container(
+                height: 65,
+                decoration: BoxDecoration(
+                  // استخدام الأبيض الشفاف بدلاً من الرمادي يعطي نقاءً للتصميم
+                  color: Colors.grey.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(
+                    color: Colors.white.withOpacity(0.4),
+                    width: 1.5,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.05),
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          icon: const Icon(PhosphorIconsRegular.magnifyingGlass,
+                              color: Colors.black87),
+                          onPressed: () {},
+                        ),
+                      ),
+
+                      // العنوان في المنتصف
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            title,
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      IconButton(
+                        icon: const Icon(PhosphorIconsRegular.list,
+                            color: Colors.black87),
+                        onPressed: () {},
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),

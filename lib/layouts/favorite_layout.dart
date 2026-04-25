@@ -10,6 +10,6 @@ class FavoriteLayout extends StatefulWidget {
 class _FavoriteLayoutState extends State<FavoriteLayout> {
   @override
   Widget build(BuildContext context) {
-    return Text("Favorite");
+    return const Center(child: Text("Favorite"));
   }
 }
