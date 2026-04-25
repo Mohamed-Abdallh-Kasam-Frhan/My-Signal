@@ -1,6 +1,6 @@
  import 'package:flutter/material.dart';
 
-class Subcategoris {
+class SubCategory {
   final int subCategoryId;
   final int categoryId;
   final String titleSubCatecory;
@@ -8,7 +8,7 @@ class Subcategoris {
   final Color color;
   final bool isDownloaded;
 
-  Subcategoris({
+  SubCategory({
   required this.subCategoryId,
   required this.categoryId,
   required this.titleSubCatecory,
@@ -18,9 +18,9 @@ class Subcategoris {
   });
 }
 
-final List<Subcategoris> subCategories = [
+final List<SubCategory> subCategories = [
   // أفعال
-  Subcategoris(
+  SubCategory(
     categoryId: 1,
     subCategoryId: 1,
     titleSubCatecory: "أفعال يومية",
@@ -28,7 +28,7 @@ final List<Subcategoris> subCategories = [
     color: Colors.blue,
     isDownloaded: false
   ),
-  Subcategoris(
+  SubCategory(
     categoryId: 1,
     subCategoryId: 2,
     titleSubCatecory: "أفعال رياضية",
@@ -37,7 +37,7 @@ final List<Subcategoris> subCategories = [
     isDownloaded: false
   ),
   // طعام
-  Subcategoris(
+  SubCategory(
     categoryId: 2,
     subCategoryId: 3,
     titleSubCatecory: "فواكه",
@@ -45,7 +45,7 @@ final List<Subcategoris> subCategories = [
     color: Colors.blue,
     isDownloaded: false
   ),
-  Subcategoris(
+  SubCategory(
     categoryId: 2,
     subCategoryId: 4,
     titleSubCatecory: "خضروات",
@@ -54,7 +54,7 @@ final List<Subcategoris> subCategories = [
     isDownloaded: false
   ),
   // عائلة
-  Subcategoris(
+  SubCategory(
     categoryId: 3,
     subCategoryId: 5,
     titleSubCatecory: "أفراد العائلة",
@@ -63,7 +63,7 @@ final List<Subcategoris> subCategories = [
     isDownloaded: false
   ),
   // مشاعر
-  Subcategoris(
+  SubCategory(
     categoryId: 4,
     subCategoryId: 6,
     titleSubCatecory: "مشاعر إيجابية",
@@ -72,7 +72,7 @@ final List<Subcategoris> subCategories = [
     isDownloaded: false
   ),
   // رياضة
-  Subcategoris(
+  SubCategory(
     categoryId: 5,
     subCategoryId: 7,
     titleSubCatecory: "كرة القدم",
@@ -80,7 +80,7 @@ final List<Subcategoris> subCategories = [
     color: Colors.blue,
     isDownloaded: false
   ),
-  Subcategoris(
+  SubCategory(
     categoryId: 5,
     subCategoryId: 8,
     titleSubCatecory: "سباحة",

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
- import 'package:mysignal/models/Categoris.dart';
+import 'package:mysignal/models/category.dart';
 
 class CategoryCard extends StatefulWidget {
   final Category element;
@@ -23,7 +23,7 @@ class _CategoryCardState extends State<CategoryCard> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            height: 110,
+            height: 100,
             decoration: const BoxDecoration(
               color: Color(0xFAFAFAFA),
               borderRadius: BorderRadius.vertical(

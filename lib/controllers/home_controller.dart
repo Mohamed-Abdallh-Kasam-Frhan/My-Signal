@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:mysignal/models/Categoris.dart';
+import 'package:mysignal/models/category.dart';
 
 class HomeController {
   List<Category> getCategories() {
