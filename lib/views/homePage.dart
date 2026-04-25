@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:mysignal/model/Categoris.dart';
+import 'package:mysignal/controllers/home_controller.dart';
 import 'package:mysignal/widgets/CategorisCard.dart';
 import 'package:mysignal/widgets/appBar.dart';
 import 'package:mysignal/widgets/CoustomBottomNavigation.dart';
 
+ class Homepage extends StatefulWidget {
+  const Homepage({super.key});
 
-class Homepage extends StatelessWidget {
+  @override
+  State<Homepage> createState() => _HomepageState();
+}
+
+class _HomepageState extends State<Homepage> {
+  final HomeController _controller = HomeController();
+
   @override
   Widget build(BuildContext context) {
+    final categories = _controller.getCategories();
     return Scaffold(
       appBar: const CustomAppBar(
         title: "التصنيفات",
@@ -17,11 +26,11 @@ class Homepage extends StatelessWidget {
         ],
       ),
       body: Container(
-        color: Color(0xFAFAFAFA),
+        color: const Color(0xFAFAFAFA),
         child: Padding(
           padding: const EdgeInsets.all(5),
           child: GridView.builder(
-            itemCount: items.length,
+            itemCount: categories.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               crossAxisSpacing: 5,
@@ -29,13 +38,16 @@ class Homepage extends StatelessWidget {
               childAspectRatio: 0.9,
             ),
             itemBuilder: (context, index) {
-              final item = items[index];
-              return Categoriscard(item: item);
+              final category = categories[index];
+              return GestureDetector(
+                // onTap: () => _controller.onCategoryTap(context, category),
+                child: CategoryCard(element: category),
+              );
             },
           ),
         ),
       ),
-      bottomNavigationBar: const Coustombottomnavigation(selectElemnt: 3),
+      bottomNavigationBar: const CustomBottomNavigation(selectElemnt: 3),
     );
   }
 }

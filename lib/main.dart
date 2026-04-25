@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mysignal/screen/homePage.dart';
+import 'package:mysignal/views/homePage.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -10,9 +10,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-  return MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: Homepage(),
-  );
-
-  }}
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const Homepage(),
+    );
+  }
+}

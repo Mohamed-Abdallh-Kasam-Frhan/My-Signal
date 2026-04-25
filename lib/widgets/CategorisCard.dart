@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:mysignal/model/Categoris.dart';
+ import 'package:mysignal/models/Categoris.dart';
 
-class Categoriscard extends StatelessWidget {
-  final Map<String, dynamic> item;
-  const Categoriscard({super.key, required this.item});
+class CategoryCard extends StatefulWidget {
+  final Category element;
+  const CategoryCard({super.key, required this.element});
 
+  @override
+  State<CategoryCard> createState() => _CategoryCardState();
+}
+
+class _CategoryCardState extends State<CategoryCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shadowColor: Colors.black,
       color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
@@ -17,7 +23,7 @@ class Categoriscard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Container(
-            height: 100,
+            height: 110,
             decoration: const BoxDecoration(
               color: Color(0xFAFAFAFA),
               borderRadius: BorderRadius.vertical(
@@ -26,9 +32,9 @@ class Categoriscard extends StatelessWidget {
             ),
             child: Center(
               child: Icon(
-                item["icon"] ?? Icons.category,
+                widget.element.icon,
                 size: 100,
-                color: item["color"] ?? Colors.blue,
+                color: widget.element.color,
               ),
             ),
           ),
@@ -39,28 +45,19 @@ class Categoriscard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  item["title"],
-                  // textDirection: TextDirection.ltr,
+                  widget.element.title,
                   style: const TextStyle(
                     fontSize: 28,
                   ),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 8),
-                if (item["progress"] > 0)
+                if (widget.element.numberOf > 0)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text("${(item["progress"] * 100).toInt()}%"),
+                      Text("${(widget.element.numberOf * 100).toInt()}%"),
                       const SizedBox(width: 5),
-                      Expanded(
-                        child: LinearProgressIndicator(
-                          value: item["progress"],
-                          color: item["color"] ?? Colors.blue,
-                          minHeight: 10,
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                      ),
                     ],
                   ),
               ],
@@ -69,6 +66,5 @@ class Categoriscard extends StatelessWidget {
         ],
       ),
     );
-    ;
   }
 }

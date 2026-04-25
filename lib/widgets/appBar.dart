@@ -12,12 +12,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       toolbarHeight: 100,
       elevation: 10,
-      backgroundColor: Colors.white,
-     shadowColor: Colors.black,
-      title:
-       Text(
-        title,style: TextStyle(fontSize: 30),
-        textDirection: TextDirection.rtl,     
+      backgroundColor: const Color(0xFAFAFAFA),
+      shadowColor: Colors.black,
+      title: Text(
+        title,
+        style: const TextStyle(fontSize: 30),
+        textDirection: TextDirection.rtl,
       ),
       actions: actions,
       
