@@ -4,7 +4,6 @@ import 'package:mysignal/core/theme/app_colors_extension.dart';
 import 'package:mysignal/views/about_page.dart';
 import 'package:mysignal/views/disclaimer_page.dart';
 import 'package:mysignal/views/privacy_policy.dart';
-import 'package:mysignal/widgets/info_page_layout.dart';
 import 'package:mysignal/views/settings_page.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 

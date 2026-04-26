@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mysignal/controllers/home_controller.dart';
-import 'package:mysignal/core/theme/app_colors_extension.dart';
 import 'package:mysignal/models/category.dart';
 import 'package:mysignal/widgets/category_card.dart';
 
@@ -17,7 +16,6 @@ class _HomeLayoutState extends State<HomeLayout> {
   final HomeController _controller = HomeController();
   @override
   Widget build(BuildContext context) {
-    final customColors = Theme.of(context).extension<AppColorsExtension>()!;
     final categories = _controller.getCategories();
     return GridView.builder(
       padding: const EdgeInsets.only(
