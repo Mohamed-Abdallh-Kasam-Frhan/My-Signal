@@ -32,9 +32,6 @@ class _HomepageState extends State<Homepage> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          const ExamCategoriesLayout(),
-          const FavoriteLayout(),
-          // التبويب الرئيسي مع Navigator داخلي
           Navigator(
             key: _homeNavigatorKey,
             onGenerateRoute: (routeSettings) {
@@ -77,6 +74,8 @@ class _HomepageState extends State<Homepage> {
               );
             },
           ),
+          const FavoriteLayout(),
+          const ExamCategoriesLayout(),
         ],
       ),
       bottomNavigationBar: _buildBlurredBottomNav(),
@@ -126,16 +125,16 @@ class _HomepageState extends State<Homepage> {
                 unselectedIconTheme: const IconThemeData(size: 30),
                 items: const [
                   BottomNavigationBarItem(
-                    icon: Icon(PhosphorIconsRegular.question),
-                    label: "إختبار",
+                    icon: Icon(PhosphorIconsRegular.house),
+                    label: "الرئيسية",
                   ),
                   BottomNavigationBarItem(
                     icon: Icon(PhosphorIconsRegular.heart), // غير محدد (مفرغ)
                     label: "المفضلات",
                   ),
                   BottomNavigationBarItem(
-                    icon: Icon(PhosphorIconsRegular.house),
-                    label: "الرئيسية",
+                    icon: Icon(PhosphorIconsRegular.question),
+                    label: "إختبار",
                   ),
                 ],
               ),
@@ -165,7 +164,7 @@ class _HomepageState extends State<Homepage> {
                 height: 65,
                 decoration: BoxDecoration(
                   // استخدام الأبيض الشفاف بدلاً من الرمادي يعطي نقاءً للتصميم
-                  color: Colors.grey.withOpacity(0.2),
+                  color: Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(25),
                   border: Border.all(
                     color: Colors.white.withOpacity(0.4),
@@ -176,16 +175,18 @@ class _HomepageState extends State<Homepage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8.0),
                   child: Row(
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.05),
-                          shape: BoxShape.circle,
+                      IconButton(
+                        icon: Icon(
+                          canPop
+                              ? Icons.arrow_back_ios_rounded
+                              : Icons.notes_rounded,
                         ),
-                        child: IconButton(
-                          icon: const Icon(PhosphorIconsRegular.magnifyingGlass,
-                              color: Colors.black87),
-                          onPressed: () {},
-                        ),
+                        color: Colors.black87,
+                        onPressed: () {
+                          if (canPop) {
+                            _homeNavigatorKey.currentState?.pop();
+                          }
+                        },
                       ),
 
                       // العنوان في المنتصف
@@ -194,7 +195,7 @@ class _HomepageState extends State<Homepage> {
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             title,
-                            textAlign: TextAlign.end,
+                            // textAlign: TextAlign.end,
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
@@ -204,18 +205,18 @@ class _HomepageState extends State<Homepage> {
                         ),
                       ),
 
-                      IconButton(
-                        icon: Icon(
-                          canPop
-                              ? Icons.arrow_forward_ios_rounded
-                              : Icons.notes_rounded,
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.05),
+                          shape: BoxShape.circle,
                         ),
-                        color: Colors.black87,
-                        onPressed: () {
-                          if (canPop) {
-                            _homeNavigatorKey.currentState?.pop();
-                          }
-                        },
+                        child: IconButton(
+                          icon: const Icon(
+                            PhosphorIconsRegular.magnifyingGlass,
+                            color: Colors.black87,
+                          ),
+                          onPressed: () {},
+                        ),
                       ),
                     ],
                   ),

@@ -23,7 +23,7 @@ class CategoryCard extends StatelessWidget {
         children: [
           // 1. أيقونة خلفية عملاقة وشفافة جداً لتعطي مظهر فني (Watermark effect)
           Positioned(
-            right: -15,
+            left: -15,
             bottom: -15,
             child: Icon(
               element.icon,

@@ -118,11 +118,22 @@ class SignDetailsLayout extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _navButton(Icons.arrow_forward_ios_rounded, "السابق", onPrevious),
+            _navButton(
+              Icons.arrow_back_ios_new_rounded,
+              "التالي",
+              onNext,
+              isNext: true,
+            ),
             Container(
-                width: 1, height: 30, color: Colors.grey.withOpacity(0.2)),
-            _navButton(Icons.arrow_back_ios_new_rounded, "التالي", onNext,
-                isNext: true),
+              width: 1,
+              height: 30,
+              color: Colors.grey.withOpacity(0.2),
+            ),
+            _navButton(
+              Icons.arrow_forward_ios_rounded,
+              "السابق",
+              onPrevious,
+            ),
           ],
         ),
       ),
@@ -132,13 +143,20 @@ class SignDetailsLayout extends StatelessWidget {
   Widget _navButton(IconData icon, String label, VoidCallback? onTap,
       {bool isNext = false}) {
     return TextButton.icon(
+      iconAlignment: isNext ? IconAlignment.start : IconAlignment.end,
       onPressed: onTap,
-      icon:
-          Icon(icon, size: 18, color: onTap != null ? sign.color : Colors.grey),
-      label: Text(label,
-          style: TextStyle(
-              color: onTap != null ? Colors.black87 : Colors.grey,
-              fontWeight: FontWeight.bold)),
+      icon: Icon(
+        icon,
+        size: 18,
+        color: onTap != null ? sign.color : Colors.grey,
+      ),
+      label: Text(
+        label,
+        style: TextStyle(
+          color: onTap != null ? Colors.black87 : Colors.grey,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 
@@ -177,7 +195,9 @@ class SignDetailsLayout extends StatelessWidget {
                 children: [
                   Icon(Icons.circle, size: 6, color: sign.color),
                   const SizedBox(width: 10),
-                  Expanded(child: Text(step.trim())),
+                  Expanded(
+                    child: Text(step.trim()),
+                  ),
                 ],
               ),
             )),
@@ -188,13 +208,20 @@ class SignDetailsLayout extends StatelessWidget {
   Widget _buildDeafConceptSection() {
     return Container(
       padding: const EdgeInsets.all(15),
+      width: double.infinity,
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.grey.shade100)),
-      child: Text(sign.description,
-          style: TextStyle(
-              fontSize: 14, color: Colors.grey.shade600, height: 1.5)),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.grey.shade100),
+      ),
+      child: Text(
+        sign.description,
+        style: TextStyle(
+          fontSize: 14,
+          color: Colors.grey.shade600,
+          height: 1.5,
+        ),
+      ),
     );
   }
 }
