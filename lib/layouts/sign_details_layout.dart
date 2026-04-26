@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mysignal/core/theme/app_colors_extension.dart';
 import 'package:mysignal/models/sign_model.dart';
 
 class SignDetailsLayout extends StatelessWidget {
@@ -11,10 +12,15 @@ class SignDetailsLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<AppColorsExtension>()!;
     return Container(
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [sign.color.withOpacity(0.15), Colors.white, Colors.white],
+          colors: [
+            sign.color.withOpacity(0.15),
+            customColors.backgroundColor!,
+            customColors.backgroundColor!
+          ],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -34,23 +40,23 @@ class SignDetailsLayout extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   // 2. صف العنوان مع صورة الشيء وأزرار التفاعل
-                  _buildHeaderRow(),
+                  _buildHeaderRow(customColors: customColors),
 
                   const SizedBox(height: 25),
 
                   // 3. خطوات التنفيذ
-                  _buildExecutionSteps(),
+                  _buildExecutionSteps(customColors: customColors),
 
                   const SizedBox(height: 25),
 
                   // 4. وصف مطول
-                  _buildDeafConceptSection(),
+                  _buildDeafConceptSection(customColors: customColors),
                 ],
               ),
             ),
 
             // 5. شريط التنقل السفلي الثابت (السابق والتالي)
-            _buildNavigationDock(),
+            _buildNavigationDock(customColors: customColors),
           ],
         ),
       ),
@@ -58,7 +64,7 @@ class SignDetailsLayout extends StatelessWidget {
   }
 
   // --- صف العنوان: يجمع الاسم، الصورة، وأيقونات التفاعل ---
-  Widget _buildHeaderRow() {
+  Widget _buildHeaderRow({required customColors}) {
     return Row(
       children: [
         // صورة الشيء الصغيرة (مثل التفاحة) للتعرف البصري
@@ -66,10 +72,13 @@ class SignDetailsLayout extends StatelessWidget {
           width: 60,
           height: 60,
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: customColors.backgroundColor,
             borderRadius: BorderRadius.circular(15),
             boxShadow: [
-              BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)
+              BoxShadow(
+                  color: customColors.shadowColor?.withOpacity(0.05) ??
+                      Colors.black.withOpacity(0.05),
+                  blurRadius: 10)
             ],
           ),
           child: ClipRRect(
@@ -82,26 +91,29 @@ class SignDetailsLayout extends StatelessWidget {
         Expanded(
           child: Text(
             sign.title,
-            style: const TextStyle(
+            style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.w900,
-                color: Color(0xFF2D2D2D)),
+                color: customColors.primaryTextColor),
           ),
         ),
         // أزرار التفاعل (أيقونات فقط لتجنب التداخل)
         IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.share_outlined, color: Colors.blueGrey)),
+            icon: Icon(Icons.share_outlined, color: customColors.iconColor)),
         IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.favorite_border_rounded,
-                color: Colors.redAccent)),
+          onPressed: () {},
+          icon: Icon(
+            Icons.favorite_border_rounded,
+            color: customColors.iconColor,
+          ),
+        ),
       ],
     );
   }
 
   // --- شريط التنقل (السابق / التالي) ---
-  Widget _buildNavigationDock() {
+  Widget _buildNavigationDock({required customColors}) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -109,10 +121,14 @@ class SignDetailsLayout extends StatelessWidget {
             bottom: 100, left: 30, right: 30), // مرفوع عن BottomNav
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.9),
+          color: customColors.backgroundColor?.withOpacity(0.9) ??
+              Colors.white.withOpacity(0.9),
           borderRadius: BorderRadius.circular(40),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 20)
+            BoxShadow(
+                color: customColors.shadowColor?.withOpacity(0.1) ??
+                    Colors.black.withOpacity(0.1),
+                blurRadius: 20)
           ],
         ),
         child: Row(
@@ -123,16 +139,19 @@ class SignDetailsLayout extends StatelessWidget {
               "التالي",
               onNext,
               isNext: true,
+              customColors: customColors,
             ),
             Container(
               width: 1,
               height: 30,
-              color: Colors.grey.withOpacity(0.2),
+              color: customColors.secondaryTextColor?.withOpacity(0.2) ??
+                  Colors.grey.withOpacity(0.2),
             ),
             _navButton(
               Icons.arrow_forward_ios_rounded,
               "السابق",
               onPrevious,
+              customColors: customColors,
             ),
           ],
         ),
@@ -141,19 +160,21 @@ class SignDetailsLayout extends StatelessWidget {
   }
 
   Widget _navButton(IconData icon, String label, VoidCallback? onTap,
-      {bool isNext = false}) {
+      {bool isNext = false, required customColors}) {
     return TextButton.icon(
       iconAlignment: isNext ? IconAlignment.start : IconAlignment.end,
       onPressed: onTap,
       icon: Icon(
         icon,
         size: 18,
-        color: onTap != null ? sign.color : Colors.grey,
+        color: onTap != null ? sign.color : customColors.secondaryTextColor,
       ),
       label: Text(
         label,
         style: TextStyle(
-          color: onTap != null ? Colors.black87 : Colors.grey,
+          color: onTap != null
+              ? customColors.primaryTextColor
+              : customColors.secondaryTextColor,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -162,11 +183,12 @@ class SignDetailsLayout extends StatelessWidget {
 
   // (بقية الدوال: _buildMediaSection, _buildExecutionSteps, _buildDeafConceptSection تبقى كما هي)
   Widget _buildMediaSection(BuildContext context) {
+    final customColors = Theme.of(context).extension<AppColorsExtension>()!;
     return Container(
       height: 250,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: customColors.backgroundColor,
         borderRadius: BorderRadius.circular(30),
         boxShadow: [
           BoxShadow(color: sign.color.withOpacity(0.1), blurRadius: 20)
@@ -180,7 +202,7 @@ class SignDetailsLayout extends StatelessWidget {
     );
   }
 
-  Widget _buildExecutionSteps() {
+  Widget _buildExecutionSteps({required customColors}) {
     List<String> steps = sign.execution.split('.');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -196,7 +218,9 @@ class SignDetailsLayout extends StatelessWidget {
                   Icon(Icons.circle, size: 6, color: sign.color),
                   const SizedBox(width: 10),
                   Expanded(
-                    child: Text(step.trim()),
+                    child: Text(step.trim(),
+                        style:
+                            TextStyle(color: customColors.secondaryTextColor)),
                   ),
                 ],
               ),
@@ -205,20 +229,22 @@ class SignDetailsLayout extends StatelessWidget {
     );
   }
 
-  Widget _buildDeafConceptSection() {
+  Widget _buildDeafConceptSection({required customColors}) {
     return Container(
       padding: const EdgeInsets.all(15),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: customColors.backgroundColor,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(
+            color: customColors.secondaryTextColor?.withOpacity(0.2) ??
+                Colors.grey.shade100),
       ),
       child: Text(
         sign.description,
         style: TextStyle(
           fontSize: 14,
-          color: Colors.grey.shade600,
+          color: customColors.secondaryTextColor,
           height: 1.5,
         ),
       ),

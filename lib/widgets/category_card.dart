@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mysignal/core/theme/app_colors_extension.dart';
 import 'package:mysignal/models/category.dart';
 class CategoryCard extends StatelessWidget {
   final Category element;
@@ -6,10 +7,11 @@ class CategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<AppColorsExtension>();
     return Container(
       // جعل البطاقة تبدو كأنها تطفو بفضل الظل الملون
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: customColors?.backgroundColor ?? Colors.white,
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
@@ -56,10 +58,10 @@ class CategoryCard extends StatelessWidget {
                 // 3. النصوص بتنسيق هرمي (Title then subtitle)
                 Text(
                   element.title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w800, // خط عريض جداً
-                    color: Color(0xFF2D2D2D),
+                    fontWeight: FontWeight.w800,
+                    color: customColors?.primaryTextColor ?? const Color(0xFF2D2D2D),
                     letterSpacing: -0.5,
                   ),
                 ),
@@ -71,7 +73,7 @@ class CategoryCard extends StatelessWidget {
                     "${element.numberOf} عنصر",
                     style: TextStyle(
                       fontSize: 13,
-                      color: Colors.grey.shade500,
+                      color: customColors?.secondaryTextColor ?? Colors.grey.shade500,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

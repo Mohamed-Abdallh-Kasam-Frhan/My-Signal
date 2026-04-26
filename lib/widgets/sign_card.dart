@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mysignal/core/theme/app_colors_extension.dart';
 import 'package:mysignal/models/sign_model.dart';
 
 class SignCard extends StatefulWidget {
@@ -24,7 +25,7 @@ class _SignCardState extends State<SignCard> {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).extension<AppColorsExtension>()!.backgroundColor,
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
@@ -42,8 +43,9 @@ class _SignCardState extends State<SignCard> {
               width: 105,
               decoration: BoxDecoration(
                 color: widget.sign.color.withOpacity(0.1),
-                borderRadius: const BorderRadius.horizontal(
-                  right: Radius.circular(24),
+                borderRadius: const BorderRadiusDirectional.only(
+                  bottomStart: Radius.circular(24),
+                  topStart: Radius.circular(24),
                 ),
               ),
               child: ClipRRect(
@@ -71,10 +73,12 @@ class _SignCardState extends State<SignCard> {
                         // العنوان
                         Text(
                           widget.sign.title,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF2D2D2D),
+                            color: Theme.of(context)
+                                .extension<AppColorsExtension>()!
+                                .primaryTextColor,
                           ),
                         ),
                         // زر المفضلة القابل للنقر
@@ -90,8 +94,14 @@ class _SignCardState extends State<SignCard> {
                             padding: const EdgeInsets.all(6),
                             decoration: BoxDecoration(
                               color: isFavorite
-                                  ? Colors.red.withOpacity(0.1)
-                                  : Colors.grey.withOpacity(0.05),
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .error
+                                      .withOpacity(0.1)
+                                  : Theme.of(context)
+                                      .extension<AppColorsExtension>()!
+                                      .backgroundColor!
+                                      .withOpacity(0.05),
                               shape: BoxShape.circle,
                             ),
                             child: Icon(
@@ -111,13 +121,15 @@ class _SignCardState extends State<SignCard> {
                       widget.sign.description,
                       style: TextStyle(
                         fontSize: 13,
-                        color: Colors.grey.shade600,
+                        color: Theme.of(context)
+                            .extension<AppColorsExtension>()!
+                            .secondaryTextColor,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
                     const Spacer(),
-                    // 3. اسم التصنيف (Pill Badge) بدلاً من الـ execution
+                    // 3. اسم التصنيف 
                     Container(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 6),

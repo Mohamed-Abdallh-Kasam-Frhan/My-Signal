@@ -1,8 +1,10 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:mysignal/core/theme/app_colors_extension.dart';
 import 'package:mysignal/layouts/exam_categories_layout.dart';
 import 'package:mysignal/layouts/favorite_layout.dart';
+import 'package:mysignal/layouts/glass_drawer_layout.dart';
 import 'package:mysignal/layouts/home_layout.dart';
 import 'package:mysignal/layouts/sign_details_layout.dart';
 import 'package:mysignal/layouts/signs_layout.dart';
@@ -18,67 +20,88 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   final GlobalKey<NavigatorState> _homeNavigatorKey =
       GlobalKey<NavigatorState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
 
   String appBarTitle = "التصنيفات";
 
   @override
   Widget build(BuildContext context) {
+    String displayTitle;
+
+    if (_selectedIndex == 1) {
+      displayTitle = "المفضلة";
+    } else if (_selectedIndex == 0) {
+      displayTitle = appBarTitle;
+    } else {
+      displayTitle = "الاختبارات";
+    }
+
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: const GlassDrawerLayout(),
       extendBody: true,
       extendBodyBehindAppBar: true,
-      appBar: _buildModernAppBar(context, title: appBarTitle),
+      appBar: ModernAppBar(
+          selectedIndex: _selectedIndex,
+          homeNavigatorKey: _homeNavigatorKey,
+          context: context,
+          title: displayTitle),
       // داخل الـ Scaffold الخاص بك
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          Navigator(
-            key: _homeNavigatorKey,
-            onGenerateRoute: (routeSettings) {
-              return MaterialPageRoute(
-                builder: (innerContext) => HomeLayout(
-                  onCategoryTap: (category) {
-                    // --- المستوى الأول: من التصنيفات إلى الإشارات ---
-                    setState(() => appBarTitle = category.title);
-
-                    Navigator.of(innerContext)
-                        .push(
-                      MaterialPageRoute(
-                        builder: (context) => SignsLayout(
-                          category: category,
-                          onSignTap: (sign) {
-                            // --- المستوى الثاني: من الإشارة إلى صفحة التفاصيل ---
-                            setState(() => appBarTitle = sign.title);
-
-                            Navigator.of(innerContext)
-                                .push(
-                              MaterialPageRoute(
-                                builder: (context) => SignDetailsLayout(
-                                    sign: sign), // صفحة التفاصيل
-                              ),
-                            )
-                                .then((_) {
-                              // عند العودة من التفاصيل، نرجع عنوان التصنيف
-                              setState(() => appBarTitle = category.title);
-                            });
-                          },
-                        ),
-                      ),
-                    )
-                        .then((_) {
-                      // عند العودة من الإشارات، نرجع لعنوان "التصنيفات" الرئيسي
-                      setState(() => appBarTitle = "التصنيفات");
-                    });
-                  },
-                ),
-              );
-            },
-          ),
+          _homeNavigation(),
           const FavoriteLayout(),
           const ExamCategoriesLayout(),
         ],
       ),
       bottomNavigationBar: _buildBlurredBottomNav(),
+    );
+  }
+
+  Navigator _homeNavigation() {
+    return Navigator(
+      key: _homeNavigatorKey,
+      onGenerateRoute: (routeSettings) {
+        return MaterialPageRoute(
+          builder: (innerContext) => HomeLayout(
+            onCategoryTap: (category) {
+              // --- المستوى الأول: من التصنيفات إلى الإشارات ---
+              setState(() => appBarTitle = category.title);
+
+              Navigator.of(innerContext)
+                  .push(
+                MaterialPageRoute(
+                  builder: (context) => SignsLayout(
+                    category: category,
+                    onSignTap: (sign) {
+                      // --- المستوى الثاني: من الإشارة إلى صفحة التفاصيل ---
+                      setState(() => appBarTitle = sign.title);
+
+                      Navigator.of(innerContext)
+                          .push(
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              SignDetailsLayout(sign: sign), // صفحة التفاصيل
+                        ),
+                      )
+                          .then((_) {
+                        // عند العودة من التفاصيل، نرجع عنوان التصنيف
+                        setState(() => appBarTitle = category.title);
+                      });
+                    },
+                  ),
+                ),
+              )
+                  .then((_) {
+                // عند العودة من الإشارات، نرجع لعنوان "التصنيفات" الرئيسي
+                setState(() => appBarTitle = "التصنيفات");
+              });
+            },
+          ),
+        );
+      },
     );
   }
 
@@ -97,10 +120,10 @@ class _HomepageState extends State<Homepage> {
                 filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.3),
+                    color: Theme.of(context).extension<AppColorsExtension>()!.glassColor?.withOpacity(0.3) ?? Colors.grey.withOpacity(0.3),
                     borderRadius: BorderRadius.circular(30),
                     border: Border.all(
-                      color: Colors.white.withOpacity(0.3),
+                      color: Theme.of(context).extension<AppColorsExtension>()!.glassBorder?.withOpacity(0.3) ?? Colors.white.withOpacity(0.3),
                     ),
                   ),
                 ),
@@ -115,8 +138,8 @@ class _HomepageState extends State<Homepage> {
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 type: BottomNavigationBarType.fixed,
-                selectedItemColor: Colors.blueAccent,
-                unselectedItemColor: Colors.black54,
+                selectedItemColor: Theme.of(context).colorScheme.primary,
+                unselectedItemColor: Theme.of(context).extension<AppColorsExtension>()!.iconColor,
                 showSelectedLabels: true,
                 showUnselectedLabels: true,
                 selectedFontSize: 16,
@@ -144,13 +167,31 @@ class _HomepageState extends State<Homepage> {
       ),
     );
   }
+}
 
-  PreferredSizeWidget _buildModernAppBar(BuildContext context,
-      {required String title}) {
-    bool canPop = _homeNavigatorKey.currentState?.canPop() ?? false;
+class ModernAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const ModernAppBar({
+    super.key,
+    required int selectedIndex,
+    required GlobalKey<NavigatorState> homeNavigatorKey,
+    required this.context,
+    required this.title,
+  })  : _selectedIndex = selectedIndex,
+        _homeNavigatorKey = homeNavigatorKey;
+
+  final int _selectedIndex;
+  final GlobalKey<NavigatorState> _homeNavigatorKey;
+  final BuildContext context;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<AppColorsExtension>()!;
+
+    bool canPopInsideHome = _selectedIndex == 0 &&
+      (_homeNavigatorKey.currentState?.canPop() ?? false);
 
     return PreferredSize(
-      // تحديد الارتفاع الكلي للشريط مع الهوامش
       preferredSize: const Size.fromHeight(100),
       child: SafeArea(
         child: Padding(
@@ -158,16 +199,14 @@ class _HomepageState extends State<Homepage> {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(25),
             child: BackdropFilter(
-              // زيادة الضبابية لتعطي ملمس الزجاج الفاخر
-              filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+              filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
               child: Container(
                 height: 65,
                 decoration: BoxDecoration(
-                  // استخدام الأبيض الشفاف بدلاً من الرمادي يعطي نقاءً للتصميم
-                  color: Colors.white.withOpacity(0.2),
+                  color: customColors.glassColor?.withOpacity(0.2) ?? Colors.white.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(25),
                   border: Border.all(
-                    color: Colors.white.withOpacity(0.4),
+                    color: customColors.glassBorder?.withOpacity(0.4) ?? Colors.white.withOpacity(0.4),
                     width: 1.5,
                   ),
                 ),
@@ -177,43 +216,43 @@ class _HomepageState extends State<Homepage> {
                     children: [
                       IconButton(
                         icon: Icon(
-                          canPop
+                          canPopInsideHome
                               ? Icons.arrow_back_ios_rounded
                               : Icons.notes_rounded,
                         ),
-                        color: Colors.black87,
+                        color: customColors.primaryTextColor,
                         onPressed: () {
-                          if (canPop) {
+                          if (canPopInsideHome) {
+                            // الرجوع للخلف داخل النافيجيتور الداخلي للرئيسية
                             _homeNavigatorKey.currentState?.pop();
+                          } else {
+                            // هنا تضع منطق فتح الـ Drawer
+                            Scaffold.of(context).openDrawer();
                           }
                         },
                       ),
-
-                      // العنوان في المنتصف
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
                             title,
-                            // textAlign: TextAlign.end,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                              color: customColors.primaryTextColor,
                             ),
                           ),
                         ),
                       ),
-
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.05),
+                          color: customColors.backgroundColor?.withOpacity(0.05) ?? Colors.black.withOpacity(0.05),
                           shape: BoxShape.circle,
                         ),
                         child: IconButton(
-                          icon: const Icon(
+                          icon: Icon(
                             PhosphorIconsRegular.magnifyingGlass,
-                            color: Colors.black87,
+                            color: customColors.primaryTextColor,
                           ),
                           onPressed: () {},
                         ),
@@ -228,4 +267,7 @@ class _HomepageState extends State<Homepage> {
       ),
     );
   }
+
+  @override
+  Size get preferredSize => const Size.fromHeight(80);
 }

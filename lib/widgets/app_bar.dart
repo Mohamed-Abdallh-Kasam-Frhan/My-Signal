@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:mysignal/core/theme/app_colors_extension.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -8,15 +9,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final customColors = Theme.of(context).extension<AppColorsExtension>()!;
     return AppBar(
       centerTitle: true,
       toolbarHeight: 100,
       elevation: 10,
-      backgroundColor: const Color(0xFAFAFAFA),
-      shadowColor: Colors.black,
+      backgroundColor: customColors.backgroundColor,
+      shadowColor: customColors.shadowColor,
       title: Text(
         title,
-        style: const TextStyle(fontSize: 30),
+        style: TextStyle(fontSize: 30, color: customColors.primaryTextColor),
         textDirection: TextDirection.rtl,
       ),
       actions: actions,
