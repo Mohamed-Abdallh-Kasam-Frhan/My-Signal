@@ -8,6 +8,7 @@ import 'package:mysignal/layouts/glass_drawer_layout.dart';
 import 'package:mysignal/layouts/home_layout.dart';
 import 'package:mysignal/layouts/sign_details_layout.dart';
 import 'package:mysignal/layouts/signs_layout.dart';
+import 'package:mysignal/views/search_page.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class Homepage extends StatefulWidget {
@@ -254,7 +255,13 @@ class ModernAppBar extends StatelessWidget implements PreferredSizeWidget {
                             PhosphorIconsRegular.magnifyingGlass,
                             color: customColors.primaryTextColor,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const SearchPage(),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
