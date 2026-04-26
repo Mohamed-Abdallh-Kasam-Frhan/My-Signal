@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mysignal/controllers/favorite_controller.dart';
+import 'package:mysignal/widgets/sign_card.dart';
 
 class FavoriteLayout extends StatefulWidget {
   const FavoriteLayout({super.key});
@@ -8,8 +10,20 @@ class FavoriteLayout extends StatefulWidget {
 }
 
 class _FavoriteLayoutState extends State<FavoriteLayout> {
+  final FavoriteController _controller = FavoriteController();
+
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text("Favorite"));
+    final signsList = _controller.getFavorites();
+    return ListView.builder(
+      padding: const EdgeInsets.only(
+        top: 100,
+        bottom: 100,
+      ), // هوامش لعدم التداخل مع الـ AppBars العائمة
+      itemCount: signsList.length,
+      itemBuilder: (context, index) {
+        return SignCard(sign: signsList[index]);
+      },
+    );
   }
 }

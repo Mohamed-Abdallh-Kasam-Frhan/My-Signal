@@ -1,64 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:mysignal/models/category.dart';
-
-class CategoryCard extends StatefulWidget {
+class CategoryCard extends StatelessWidget {
   final Category element;
   const CategoryCard({super.key, required this.element});
 
   @override
-  State<CategoryCard> createState() => _CategoryCardState();
-}
-
-class _CategoryCardState extends State<CategoryCard> {
-  @override
   Widget build(BuildContext context) {
-    return Card(
-      shadowColor: Colors.black,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
+    return Container(
+      // جعل البطاقة تبدو كأنها تطفو بفضل الظل الملون
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
+        boxShadow: [
+          BoxShadow(
+            color: element.color.withOpacity(0.12), // ظل بلون الفئة نفسها
+            blurRadius: 20,
+            offset: const Offset(0, 10),
+          ),
+        ],
       ),
-      elevation: 5,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+      child: Stack(
         children: [
-          Container(
-            height: 100,
-            decoration: const BoxDecoration(
-              color: Color(0xFAFAFAFA),
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(15),
-              ),
-            ),
-            child: Center(
-              child: Icon(
-                widget.element.icon,
-                size: 100,
-                color: widget.element.color,
-              ),
+          // 1. أيقونة خلفية عملاقة وشفافة جداً لتعطي مظهر فني (Watermark effect)
+          Positioned(
+            right: -15,
+            bottom: -15,
+            child: Icon(
+              element.icon,
+              size: 100,
+              color: element.color.withOpacity(0.05),
             ),
           ),
+
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(20.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment
+                  .start, // محاذاة لليمين أو اليسار تعطي طابعاً عصرياً أكثر
               children: [
-                Text(
-                  widget.element.title,
-                  style: const TextStyle(
-                    fontSize: 28,
+                // 2. حاوية الأيقونة (مربعة بزوايا منحنية بدلاً من الدائرة)
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: element.color.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(18),
                   ),
-                  textAlign: TextAlign.center,
+                  child: Icon(
+                    element.icon,
+                    size: 28,
+                    color: element.color,
+                  ),
                 ),
-                const SizedBox(height: 8),
-                if (widget.element.numberOf > 0)
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text("${widget.element.numberOf}"),
-                      const SizedBox(width: 5),
-                    ],
+                const Spacer(), // دفع النصوص للأسفل
+
+                // 3. النصوص بتنسيق هرمي (Title then subtitle)
+                Text(
+                  element.title,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800, // خط عريض جداً
+                    color: Color(0xFF2D2D2D),
+                    letterSpacing: -0.5,
+                  ),
+                ),
+
+                const SizedBox(height: 4),
+
+                if (element.numberOf > 0)
+                  Text(
+                    "${element.numberOf} عنصر",
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.grey.shade500,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
               ],
             ),

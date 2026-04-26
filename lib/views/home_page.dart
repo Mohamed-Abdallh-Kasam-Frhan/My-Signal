@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:mysignal/layouts/exam_categories_layout.dart';
 import 'package:mysignal/layouts/favorite_layout.dart';
 import 'package:mysignal/layouts/home_layout.dart';
-import 'package:mysignal/widgets/app_bar.dart';
+import 'package:mysignal/layouts/sign_details_layout.dart';
+import 'package:mysignal/layouts/signs_layout.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class Homepage extends StatefulWidget {
@@ -15,20 +16,67 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  final GlobalKey<NavigatorState> _homeNavigatorKey =
+      GlobalKey<NavigatorState>();
   int _selectedIndex = 0;
+
+  String appBarTitle = "التصنيفات";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
       extendBodyBehindAppBar: true,
-      appBar: _buildModernAppBar(context, title: "التصنيفات"),
+      appBar: _buildModernAppBar(context, title: appBarTitle),
+      // داخل الـ Scaffold الخاص بك
       body: IndexedStack(
         index: _selectedIndex,
-        children: const [
-          ExamCategoriesLayout(),
-          FavoriteLayout(),
-          HomeLayout(),
+        children: [
+          const ExamCategoriesLayout(),
+          const FavoriteLayout(),
+          // التبويب الرئيسي مع Navigator داخلي
+          Navigator(
+            key: _homeNavigatorKey,
+            onGenerateRoute: (routeSettings) {
+              return MaterialPageRoute(
+                builder: (innerContext) => HomeLayout(
+                  onCategoryTap: (category) {
+                    // --- المستوى الأول: من التصنيفات إلى الإشارات ---
+                    setState(() => appBarTitle = category.title);
+
+                    Navigator.of(innerContext)
+                        .push(
+                      MaterialPageRoute(
+                        builder: (context) => SignsLayout(
+                          category: category,
+                          onSignTap: (sign) {
+                            // --- المستوى الثاني: من الإشارة إلى صفحة التفاصيل ---
+                            setState(() => appBarTitle = sign.title);
+
+                            Navigator.of(innerContext)
+                                .push(
+                              MaterialPageRoute(
+                                builder: (context) => SignDetailsLayout(
+                                    sign: sign), // صفحة التفاصيل
+                              ),
+                            )
+                                .then((_) {
+                              // عند العودة من التفاصيل، نرجع عنوان التصنيف
+                              setState(() => appBarTitle = category.title);
+                            });
+                          },
+                        ),
+                      ),
+                    )
+                        .then((_) {
+                      // عند العودة من الإشارات، نرجع لعنوان "التصنيفات" الرئيسي
+                      setState(() => appBarTitle = "التصنيفات");
+                    });
+                  },
+                ),
+              );
+            },
+          ),
         ],
       ),
       bottomNavigationBar: _buildBlurredBottomNav(),
@@ -100,6 +148,8 @@ class _HomepageState extends State<Homepage> {
 
   PreferredSizeWidget _buildModernAppBar(BuildContext context,
       {required String title}) {
+    bool canPop = _homeNavigatorKey.currentState?.canPop() ?? false;
+
     return PreferredSize(
       // تحديد الارتفاع الكلي للشريط مع الهوامش
       preferredSize: const Size.fromHeight(100),
@@ -155,9 +205,17 @@ class _HomepageState extends State<Homepage> {
                       ),
 
                       IconButton(
-                        icon: const Icon(PhosphorIconsRegular.list,
-                            color: Colors.black87),
-                        onPressed: () {},
+                        icon: Icon(
+                          canPop
+                              ? Icons.arrow_forward_ios_rounded
+                              : Icons.notes_rounded,
+                        ),
+                        color: Colors.black87,
+                        onPressed: () {
+                          if (canPop) {
+                            _homeNavigatorKey.currentState?.pop();
+                          }
+                        },
                       ),
                     ],
                   ),
