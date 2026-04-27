@@ -70,4 +70,35 @@ class AppColorsExtension extends ThemeExtension<AppColorsExtension> {
       shadowColor: Color.lerp(shadowColor, other.shadowColor, t)
     );
   }
+
+  static AppColorsExtension generateLiteModeColors(){
+    return AppColorsExtension(
+      glassColor: Colors.white.withOpacity(0.2),
+      glassBorder: Colors.white.withOpacity(0.4),
+      mainTextColor: const Color(0xFF1E293B),
+      subTextColor: Colors.grey.shade600,
+      // new fields for better dark/light consistency
+      primaryTextColor: const Color(0xFF1E293B),
+      secondaryTextColor: Colors.grey.shade600,
+      hintTextColor: Colors.grey.shade400,
+      iconColor: Colors.black54,
+      backgroundColor: Colors.white,
+      shadowColor: Colors.black,
+    );
+  }
+
+  static AppColorsExtension generateDarkModeColors(){
+    return AppColorsExtension(
+      glassColor: Colors.black.withOpacity(0.4),
+      glassBorder: Colors.white.withOpacity(0.1),
+      mainTextColor: Colors.white,
+      subTextColor: Colors.white70,
+      primaryTextColor: Colors.white,
+      secondaryTextColor: Colors.white70,
+      hintTextColor: Colors.white60,
+      iconColor: Colors.white70,
+      backgroundColor: const Color(0xFF0B1220),
+      shadowColor: Colors.black,
+    );
+  }
 }

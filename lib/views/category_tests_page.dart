@@ -1,9 +1,9 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mysignal/core/theme/app_colors_extension.dart';
 import 'package:mysignal/models/exam_category.dart';
 import 'package:mysignal/models/test_model.dart';
-import 'package:mysignal/views/take_test_page.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class CategoryTestsPage extends StatelessWidget {
@@ -17,39 +17,31 @@ class CategoryTestsPage extends StatelessWidget {
     // بيانات تجريبية لمحاكاة الحالات المختلفة
     final List<TestModel> tests = [
       TestModel(
+          id: 1,
           title: "اختبار الحروف الأساسية 1",
           status: TestStatus.passed,
           score: 95,
           totalQuestions: 10),
       TestModel(
+          id: 2,
           title: "اختبار الحروف المتشابهة",
           status: TestStatus.inProgress,
           totalQuestions: 10,
           answeredQuestions: 5),
       TestModel(
+          id: 3,
           title: "الاختبار الشامل للحروف",
           status: TestStatus.failed,
           score: 40,
           totalQuestions: 20),
       TestModel(
+          id: 4,
           title: "تحدي السرعة: الحروف",
           status: TestStatus.notStarted,
           totalQuestions: 15),
     ];
 
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text(category.title,
-            style: TextStyle(
-                color: customColors.mainTextColor,
-                fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        leading: const BackButton(),
-      ),
-      body: Stack(
+    return Stack(
         children: [
           // خلفية التدرج
           Container(color: Theme.of(context).scaffoldBackgroundColor),
@@ -67,14 +59,12 @@ class CategoryTestsPage extends StatelessWidget {
                         color: customColors.mainTextColor)),
                 const SizedBox(height: 15),
                 ...tests
-                    .map((test) => _buildTestCard(context, test, customColors))
-                    .toList(),
+                    .map((test) => _buildTestCard(context, test, customColors)),
                 const SizedBox(height: 100), // مساحة إضافية في الأسفل
               ],
             ),
           ),
         ],
-      ),
     );
   }
 
@@ -104,12 +94,8 @@ class CategoryTestsPage extends StatelessWidget {
           // زر الانتقال لـ SignsLayout للمراجعة
           ElevatedButton.icon(
             onPressed: () {
-              // Navigator.of(context).push(
-              //   MaterialPageRoute(
-              //     // builder: (context) => SignsLayout(category: category, onSignTap: ,),
-              //   ),
-              // );
-              // Navigator.push... لصفحة SignsLayout
+              context.push(
+                  "/home/signs/${category.categoryId}?title=${category.title}"); // نمرر الـ id والعنوان في الرابط
             },
             icon: const Icon(PhosphorIconsFill.bookOpenText, size: 20),
             label: const Text("راجع المصطلحات قبل الاختبار",
@@ -175,11 +161,9 @@ class CategoryTestsPage extends StatelessWidget {
     return InkWell(
       borderRadius: BorderRadius.circular(25),
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (context) => const TakeTestPage(),
-          ),
-        );
+        // context.push(
+        //     '/exams/category/${category.categoryId}/take/${test.id}?title=${test.title}'); // نمرر الـ id والعنوان في الرابط
+        context.push('/exams/take/${test.id}?title=${test.title}'); // نمرر الـ id والعنوان في الرابط
       },
       child: Container(
         margin: const EdgeInsets.only(bottom: 15),
@@ -220,7 +204,7 @@ class CategoryTestsPage extends StatelessWidget {
                           fontSize: 13,
                           color: statusColor,
                           fontWeight: FontWeight.w500)),
-      
+
                   // عرض شريط تقدم إذا كان الاختبار قيد العمل
                   if (test.status == TestStatus.inProgress) ...[
                     const SizedBox(height: 10),
@@ -235,22 +219,23 @@ class CategoryTestsPage extends StatelessWidget {
                 ],
               ),
             ),
-      
+
             // عرض الدرجة في حال النجاح أو الرسوب
             if (test.score != null)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: statusColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   "%${test.score!.toInt()}",
-                  style:
-                      TextStyle(color: statusColor, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      color: statusColor, fontWeight: FontWeight.bold),
                 ),
               ),
-      
+
             if (test.status == TestStatus.notStarted)
               const Icon(Icons.arrow_forward_ios_rounded,
                   size: 14, color: Colors.grey),

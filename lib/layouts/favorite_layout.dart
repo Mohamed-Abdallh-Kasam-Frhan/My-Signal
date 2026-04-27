@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mysignal/controllers/category_controller.dart';
 import 'package:mysignal/controllers/favorite_controller.dart';
+import 'package:mysignal/models/category.dart';
 import 'package:mysignal/widgets/sign_card.dart';
 
 class FavoriteLayout extends StatefulWidget {
@@ -22,7 +24,8 @@ class _FavoriteLayoutState extends State<FavoriteLayout> {
       ), // هوامش لعدم التداخل مع الـ AppBars العائمة
       itemCount: signsList.length,
       itemBuilder: (context, index) {
-        return SignCard(sign: signsList[index]);
+        Category category = CategoryController().getCategoryById(signsList[index].id); // الحصول على التصنيف بناءً على الـ categoryId في الإشارة
+        return SignCard(sign: signsList[index], category: category,); // تمرير null للتصنيف لأننا في صفحة المفضلة
       },
     );
   }

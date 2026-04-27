@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mysignal/core/theme/app_colors_extension.dart';
 import 'dart:math' as Math;
-import 'package:mysignal/views/home_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,10 +14,6 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen>
   with TickerProviderStateMixin {
   late AnimationController _controller;
-  /// Animation that controls the opacity transition for fading effects.
-  /// 
-  /// This animation is typically used to animate the visibility of widgets
-  /// during transitions, such as in a splash screen or when showing/hiding UI elements.
   late Animation<double> _fadeAnimation;
   late AnimationController _pulseController;
   late Animation<double> _shadowAnimation;
@@ -49,9 +45,7 @@ class _SplashScreenState extends State<SplashScreen>
     // الانتقال بعد 4 ثوانٍ لإعطاء وقت لحركة النقاط
     Timer(const Duration(seconds: 4), () {
       if (mounted) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const Homepage()),
-        );
+        context.go('/home?title=التصنيفات'); // نمرر العنوان في الرابط
       }
     });
   }

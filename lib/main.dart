@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mysignal/app_router.dart';
 import 'package:mysignal/core/theme/app_colors_extension.dart';
 import 'package:mysignal/providers/theme_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:mysignal/views/splash_page.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -18,39 +18,15 @@ void main() {
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  final lightCustomColors = AppColorsExtension(
-    glassColor: Colors.white.withOpacity(0.2),
-    glassBorder: Colors.white.withOpacity(0.4),
-    mainTextColor: const Color(0xFF1E293B),
-    subTextColor: Colors.grey.shade600,
-    // new fields for better dark/light consistency
-    primaryTextColor: const Color(0xFF1E293B),
-    secondaryTextColor: Colors.grey.shade600,
-    hintTextColor: Colors.grey.shade400,
-    iconColor: Colors.black54,
-    backgroundColor: Colors.white,
-    shadowColor: Colors.black,
-  );
+  final lightCustomColors = AppColorsExtension.generateLiteModeColors();
 
-  final darkCustomColors = AppColorsExtension(
-    glassColor: Colors.black.withOpacity(0.4),
-    glassBorder: Colors.white.withOpacity(0.1),
-    mainTextColor: Colors.white,
-    subTextColor: Colors.white70,
-    // new fields tuned for dark mode
-    primaryTextColor: Colors.white,
-    secondaryTextColor: Colors.white70,
-    hintTextColor: Colors.white60,
-    iconColor: Colors.white70,
-    backgroundColor: const Color(0xFF0B1220),
-    shadowColor: Colors.black,
-  );
+  final darkCustomColors = AppColorsExtension.generateDarkModeColors();
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
-    return MaterialApp(
+    return MaterialApp.router(
       locale: const Locale('ar', 'SA'),
 
       // 2. إعدادات دعم الاتجاه من اليمين لليسار
@@ -85,7 +61,7 @@ class MyApp extends StatelessWidget {
         // تخصيص الألوان للوضع المظلم
       ),
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
+      routerConfig: goRouter,
     );
   }
 }

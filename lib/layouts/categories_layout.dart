@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:mysignal/controllers/home_controller.dart';
-import 'package:mysignal/models/category.dart';
 import 'package:mysignal/widgets/category_card.dart';
 
-class HomeLayout extends StatefulWidget {
-  const HomeLayout({super.key, required this.onCategoryTap});
-
-  final Function(Category) onCategoryTap;
+class CategoriesLayout extends StatefulWidget {
+  const CategoriesLayout({super.key});
 
   @override
-  State<HomeLayout> createState() => _HomeLayoutState();
+  State<CategoriesLayout> createState() => _CategoriesLayoutState();
 }
 
-class _HomeLayoutState extends State<HomeLayout> {
+class _CategoriesLayoutState extends State<CategoriesLayout> {
   final HomeController _controller = HomeController();
   @override
   Widget build(BuildContext context) {
@@ -39,13 +36,7 @@ class _HomeLayoutState extends State<HomeLayout> {
       ),
       itemBuilder: (context, index) {
         final category = categories[index];
-        return GestureDetector(
-          onTap: () {
-            // نستخدم الـ Navigator الداخلي
-            widget.onCategoryTap(category);
-          },
-          child: CategoryCard(element: category),
-        );
+        return CategoryCard(element: category);
       },
     );
   }

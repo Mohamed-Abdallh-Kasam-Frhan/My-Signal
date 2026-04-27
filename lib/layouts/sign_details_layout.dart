@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:mysignal/controllers/sign_controller.dart';
 import 'package:mysignal/core/theme/app_colors_extension.dart';
 import 'package:mysignal/models/sign_model.dart';
 
 class SignDetailsLayout extends StatelessWidget {
-  final SignModel sign;
-  final VoidCallback? onNext; // دالة للانتقال للتالي
-  final VoidCallback? onPrevious; // دالة للانتقال للسابق
+  SignDetailsLayout({
+    super.key,
+    required this.signId,
+  });
 
-  const SignDetailsLayout(
-      {super.key, required this.sign, this.onNext, this.onPrevious});
+  final int signId;
+  SignModel? _sign;
+
+  onPrevious() {
+    // منطق الانتقال للإشارة السابقة (مثلاً: id - 1)
+  }
+
+  onNext() {
+    // منطق الانتقال للإشارة التالية (مثلاً: id + 1)
+  }
 
   @override
   Widget build(BuildContext context) {
+    SignModel sign = _sign ?? SignController().getSignById(signId);
+    _sign = sign; // تخزين الإشارة الحالية لاستخدامها في التنقل
     final customColors = Theme.of(context).extension<AppColorsExtension>()!;
     return Container(
       decoration: BoxDecoration(
@@ -65,6 +77,7 @@ class SignDetailsLayout extends StatelessWidget {
 
   // --- صف العنوان: يجمع الاسم، الصورة، وأيقونات التفاعل ---
   Widget _buildHeaderRow({required customColors}) {
+    SignModel sign = _sign ?? SignController().getSignById(signId);
     return Row(
       children: [
         // صورة الشيء الصغيرة (مثل التفاحة) للتعرف البصري
@@ -161,6 +174,7 @@ class SignDetailsLayout extends StatelessWidget {
 
   Widget _navButton(IconData icon, String label, VoidCallback? onTap,
       {bool isNext = false, required customColors}) {
+    SignModel sign = _sign ?? SignController().getSignById(signId);
     return TextButton.icon(
       iconAlignment: isNext ? IconAlignment.start : IconAlignment.end,
       onPressed: onTap,
@@ -183,6 +197,7 @@ class SignDetailsLayout extends StatelessWidget {
 
   // (بقية الدوال: _buildMediaSection, _buildExecutionSteps, _buildDeafConceptSection تبقى كما هي)
   Widget _buildMediaSection(BuildContext context) {
+    SignModel sign = _sign ?? SignController().getSignById(signId);
     final customColors = Theme.of(context).extension<AppColorsExtension>()!;
     return Container(
       height: 250,
@@ -203,6 +218,7 @@ class SignDetailsLayout extends StatelessWidget {
   }
 
   Widget _buildExecutionSteps({required customColors}) {
+    SignModel sign = _sign ?? SignController().getSignById(signId);
     List<String> steps = sign.execution.split('.');
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,6 +246,8 @@ class SignDetailsLayout extends StatelessWidget {
   }
 
   Widget _buildDeafConceptSection({required customColors}) {
+    SignModel sign = _sign ?? SignController().getSignById(signId);
+
     return Container(
       padding: const EdgeInsets.all(15),
       width: double.infinity,

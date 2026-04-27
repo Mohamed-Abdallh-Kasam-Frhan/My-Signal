@@ -6,8 +6,11 @@ class TestModel {
   final double? score; // من 100
   final int totalQuestions;
   final int answeredQuestions;
+  final int id; // معرف فريد لكل اختبار
 
   TestModel({
+    required this.id,
+
     required this.title,
     required this.status,
     this.score,

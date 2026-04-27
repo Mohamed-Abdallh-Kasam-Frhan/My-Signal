@@ -1,5 +1,5 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mysignal/core/theme/app_colors_extension.dart';
 import 'package:mysignal/models/exam_category.dart';
 import 'package:mysignal/views/category_tests_page.dart';
@@ -20,24 +20,28 @@ class ExamCategoriesLayout extends StatelessWidget {
           icon: PhosphorIconsFill.textAUnderline,
           color: Colors.blue,
           totalExams: 5,
+          categoryId: 1,
           progress: 0.8),
       ExamCategory(
           title: "الأرقام والحساب",
           icon: PhosphorIconsFill.numberSquareOne,
           color: Colors.orange,
           totalExams: 3,
+          categoryId: 2,
           progress: 0.4),
       ExamCategory(
           title: "الأفعال الشائعة",
           icon: PhosphorIconsFill.lightning,
           color: Colors.green,
           totalExams: 8,
+          categoryId: 3,
           progress: 0.1),
       ExamCategory(
           title: "العائلة والمجتمع",
           icon: PhosphorIconsFill.usersThree,
           color: Colors.purple,
           totalExams: 4,
+          categoryId: 4,
           progress: 0.0),
     ];
 
@@ -125,11 +129,12 @@ class ExamCategoriesLayout extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => CategoryTestsPage(category: item),
-            ),
-          );
+            context.push('/exams/category/${item.categoryId}?title=${item.title}'); // نمرر الـ id والعنوان في الرابط
+          // Navigator.of(context).push(
+          //   MaterialPageRoute(
+          //     builder: (context) => CategoryTestsPage(category: item),
+          //   ),
+          // );
         },
         borderRadius: BorderRadius.circular(24),
         child: Padding(

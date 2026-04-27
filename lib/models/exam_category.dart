@@ -5,6 +5,7 @@ class ExamCategory {
   final IconData icon;
   final Color color;
   final int totalExams;
+  final int categoryId; // معرف التصنيف لربطه بالاختبارات والإشارات
   final double progress; // نسبة الإنجاز من 0.0 إلى 1.0
 
   ExamCategory({
@@ -13,5 +14,6 @@ class ExamCategory {
     required this.color,
     required this.totalExams,
     required this.progress,
+    required this.categoryId,
   });
 }
